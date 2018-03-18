@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Electron App</title>
+        <meta name="J.Addis" content=""/>
+        <link rel="stylesheet" type="text/css" href="/css/app.css">
+        
+        <script type="text/javascript">
+            var electron = require('electron');
+            var shell = electron.shell;
+            var ipc = electron.ipcRenderer;
+        </script>
+        
+    </head>
+    <body id="page-info">
+        <main class="info-content">
+            <h3 class="page-headline">Wisdom Pet</h3>
+            <p>
+                Welcome to Electron App.<br/>
+                <strong>Version 1.0.0</strong><br/>
+                <small>Built by Jacob Addis <a id="url" href="#" onclick="shell.openExternal('http://www.jacob-addis.com')">Website</a></small>
+            </p>
+        </main>
+    </body>
+</html>

@@ -7,7 +7,6 @@ app.on('ready', function() {
     appWindow = new BrowserWindow({
         show: false
     });
-    appWindow.loadURL('http://www.jacob-addis.com');
 
     infoWindow = new BrowserWindow({
         width: 400,
@@ -16,12 +15,13 @@ app.on('ready', function() {
         transparent: true,
         show: false
     });
-    infoWindow.loadURL('file://' + __dirname + '/info.html');
+    infoWindow.loadURL('file://' + __dirname + '/index.html');
 
     appWindow.once('ready-to-show', function() {
         appWindow.show();
         setTimeout(function() {
             infoWindow.show();
+
         }, 1000);
     });
 });
