@@ -41,13 +41,13 @@ var MainInterface = React.createClass({
     ipc.sendSync('openInfoWindow')
   },
 
-  addItem: function() {
+  addItem: function(tempItem) {
     var tempApts = this.state.myAppointments;
     tempApts.push(tempItem);
     this.setState({
       myAppointments: tempApts,
       aptBodyVisible: false
-    })
+    });
   },
 
   deleteMessage: function(item) {
