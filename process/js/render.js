@@ -4,13 +4,19 @@ var bootstrap = require('bootstrap');
 var fs = eRequire('fs');
 var loadApts = JSON.parse(fs.readFileSync(dataLocation));
 
+var electron = eRequire('electron');
+var ipc = electron.ipcRenderer;
+
 var React = require('react');
 var ReactDOM = require('react-dom');
 var AptList = require('./AptList');
+var Toolbar = require('./Toolbar');
+var AddAppointment = require('./AddAppointment');
 
 var MainInterface = React.createClass({
   getInitialState: function() {
     return {
+      aptBodyVisible: false,
       myAppointments: loadApts
     }
   },
@@ -22,6 +28,17 @@ var MainInterface = React.createClass({
         console.log(err);
       }
     });
+  },
+
+  toggleAptDisplay: function() {
+    var tempVisibility = !this.state.aptBodyVisible;
+    this.setState({
+      aptBodyVisible: tempVisibility
+    });
+  },
+
+  showAbout: function() {
+    ipc.sendSync('openInfoWindow')
   },
 
   deleteMessage: function(item) {
@@ -50,15 +67,23 @@ var MainInterface = React.createClass({
     return (
 
       <div className="application">
-        <div className="container">
-          <div className="row">
-            <div className="appointments col-sm-12">
-              <h2 className="appointments-headline">Current Appointments</h2>
-              <ul className="item-list media-list">
+        <div className="interface">
+          <Toolbar
+            handleAbout = {this.showAbout}
+          />
+          <AddAppointment
+            handleToggle = {toggleAptDisplay}
+          />
+          <div className="container">
+            <div className="row">
+              <div className="appointments col-sm-12">
+                <h2 className="appointments-headline">Current Appointments</h2>
+                <ul className="item-list media-list">
 
-                {myAppointments}
+                  {myAppointments}
 
-              </ul>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
