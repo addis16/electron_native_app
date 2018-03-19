@@ -52,6 +52,12 @@ var MainInterface = React.createClass({
   render: function() {
     var myAppointments = this.state.myAppointments;
 
+    if(this.state.aptBodyVisible === true) {
+      $('#addAppointment').modal('show');
+    } else {
+      $('#addAppointment').modal('hide');
+    }
+
     myAppointments = myAppointments.map(function(item, index) {
       return(
 
@@ -69,10 +75,11 @@ var MainInterface = React.createClass({
       <div className="application">
         <div className="interface">
           <Toolbar
+            handleToggle = {this.toggleAptDisplay}
             handleAbout = {this.showAbout}
           />
           <AddAppointment
-            handleToggle = {toggleAptDisplay}
+            handleToggle = {this.toggleAptDisplay}
           />
           <div className="container">
             <div className="row">

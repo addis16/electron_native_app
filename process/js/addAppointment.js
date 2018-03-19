@@ -1,4 +1,4 @@
-var React = import('react');
+var React = require('react');
 
 var AddAppointment = React.createClass({
 
