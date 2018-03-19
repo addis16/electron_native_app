@@ -15,6 +15,15 @@ var MainInterface = React.createClass({
     }
   },
 
+  componentDidUpdate: function() {                                                  // Saves changes on update of data
+    fs.writeFile(dataLocation, JSON.stringify(this.state.myAppointments), 'utf8',
+    function(err) {
+      if(err) {
+        console.log(err);
+      }
+    });
+  },
+
   deleteMessage: function(item) {
     var allApts = this.state.myAppointments;
     var newApts = _.without(allApts, item);
@@ -47,7 +56,7 @@ var MainInterface = React.createClass({
               <h2 className="appointments-headline">Current Appointments</h2>
               <ul className="item-list media-list">
 
-                {myAppointments} 
+                {myAppointments}
 
               </ul>
             </div>
