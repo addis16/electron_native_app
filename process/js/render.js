@@ -1,5 +1,5 @@
 var $ = jQuery = require('jquery');
-var _ = require('lodash');
+var lodash = require('lodash');
 var bootstrap = require('bootstrap');
 var fs = eRequire('fs');
 var loadApts = JSON.parse(fs.readFileSync(dataLocation));
@@ -41,9 +41,18 @@ var MainInterface = React.createClass({
     ipc.sendSync('openInfoWindow')
   },
 
+  addItem: function() {
+    var tempApts = this.state.myAppointments;
+    tempApts.push(tempItem);
+    this.setState({
+      myAppointments: tempApts,
+      aptBodyVisible: false
+    })
+  },
+
   deleteMessage: function(item) {
     var allApts = this.state.myAppointments;
-    var newApts = _.without(allApts, item);
+    var newApts = lodash.without(allApts, item);
     this.setState({
       myAppointments: newApts
     });
@@ -80,6 +89,7 @@ var MainInterface = React.createClass({
           />
           <AddAppointment
             handleToggle = {this.toggleAptDisplay}
+            addApt = {this.addItem}
           />
           <div className="container">
             <div className="row">
