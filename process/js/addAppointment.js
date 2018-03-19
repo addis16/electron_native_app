@@ -29,7 +29,14 @@ var AddAppointment = React.createClass({
       aptDate: this.inputAptDate.value + ' ' + this.inputAptTime.value,
       aptNotes: this.inputAptNotes.value
     };
+
     this.props.addApt(tempItem);
+
+    this.inputPetName.value  = '';
+    this.inputPetOwner.value = '';
+    this.inputAptDate.value  = formatDate(defaultDate, '-');
+    this.inputAptTime.value  = '09:00';
+    this.inputAptNotes.value = '';
   },
 
   render: function() {
