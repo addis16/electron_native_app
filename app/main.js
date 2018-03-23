@@ -48,7 +48,7 @@ app.on('ready', function() {
       label: 'Electron App',
       submenu: [
         {
-          accelerator: process === 'darwin' ? 'Command+I' : 'Ctrl+I',
+          accelerator: process.platform === 'darwin' ? 'Command+I' : 'Ctrl+I',
           click(item) { toggleWindow(infoWindow) }
         },
         {
