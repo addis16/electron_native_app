@@ -12,13 +12,29 @@ var ReactDOM = require('react-dom');
 var AptList = require('./AptList');
 var Toolbar = require('./Toolbar');
 var AddAppointment = require('./AddAppointment');
+var HeaderNav = require('./HeaderNav');
 
 var MainInterface = React.createClass({
+
   getInitialState: function() {
     return {
       aptBodyVisible: false,
+      orderBy: 'petName',
+      orderDir: 'asc',
+      queryText: '',
       myAppointments: loadApts
     }
+  },
+
+  componentDidMount: function() {
+    ipc.on('addAppointment', function(event, message) {
+      this.toggleAptDisplay();
+    }.bind(this));
+  },
+  componentWillUnmount: function() {
+    ipc.removeListener('addAppointment', function(event, message) {
+      this.toggleAptDisplay();
+    }.bind(this));
   },
 
   componentDidUpdate: function() {                                                  // Saves changes on update of data
@@ -58,8 +74,25 @@ var MainInterface = React.createClass({
     });
   },
 
+  reOrder: function(orderBy, orderDir) {
+    this.setState({
+      orderBy: orderBy,
+      orderDir: orderDir
+    });
+  },
+
+  searchApts: function(query) {
+    this.setState({
+      queryText: query
+    });
+  },
+
   render: function() {
     var myAppointments = this.state.myAppointments;
+    var filteredApts = [];
+    var queryText = this.state.queryText;
+    var orderBy = this.state.orderBy;
+    var orderDir = this.state.orderDir;
 
     if(this.state.aptBodyVisible === true) {
       $('#addAppointment').modal('show');
@@ -67,7 +100,22 @@ var MainInterface = React.createClass({
       $('#addAppointment').modal('hide');
     }
 
-    myAppointments = myAppointments.map(function(item, index) {
+    for (var i = 0; i < myAppointments.length; i++) {
+      if (
+        (myAppointments[i].petName.toLowerCase().indexOf(queryText) != -1) ||
+        (myAppointments[i].ownerName.toLowerCase().indexOf(queryText) != -1) ||
+        (myAppointments[i].aptDate.toLowerCase().indexOf(queryText) != -1) ||
+        (myAppointments[i].aptNotes.toLowerCase().indexOf(queryText) != -1)
+      ) {
+        filteredApts.push(myAppointments[i]);
+      }
+    }
+
+    filteredApts = lodash.orderBy(filteredApts, function(item) {
+      return item[orderBy].toLowerCase();
+    }, orderDir);
+
+    filteredApts = filteredApts.map(function(item, index) {
       return(
 
         <AptList key = {index}
@@ -82,6 +130,12 @@ var MainInterface = React.createClass({
     return (
 
       <div className="application">
+        <HeaderNav
+          onSearch={this.searchApts}
+          orderBy={this.state.orderBy}
+          orderDir={this.state.orderDir}
+          onReOrder={this.reOrder}
+        />
         <div className="interface">
           <Toolbar
             handleToggle = {this.toggleAptDisplay}
@@ -97,7 +151,7 @@ var MainInterface = React.createClass({
                 <h2 className="appointments-headline">Current Appointments</h2>
                 <ul className="item-list media-list">
 
-                  {myAppointments}
+                  {filteredApts}
 
                 </ul>
               </div>
